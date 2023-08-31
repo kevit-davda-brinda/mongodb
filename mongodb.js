@@ -8,11 +8,11 @@ const { MongoClient, ObjectID } = require('mongodb');
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url, { useUnifiedTopology: true });
 
-// const id = new ObjectID();
-// console.log(typeof id);
-// console.log(id.getTimestamp());
-// console.log(id.id.length);
-// console.log(id.toHexString());
+const id = new ObjectID();
+console.log(typeof id);
+console.log(id.getTimestamp());
+console.log(id.id.length);
+console.log(id.toHexString());
 
 // Database Name
 const dbName = 'task-manager';
@@ -25,40 +25,40 @@ async function main() {
     const collection = db.collection('users');
 
 
-    // const data = [
-    //     {
-    //         name: 'vikram',
-    //         age: 26,
-    //     },
-    //     {
-    //         name: 'gunther',
-    //         age: 34,
-    //     }
-    // ]
+    const data = [
+        {
+            name: 'vikram',
+            age: 26,
+        },
+        {
+            name: 'gunther',
+            age: 34,
+        }
+    ]
 
-    // const insertMany = await collection.insertMany(data)
-    // const insertOne = await collection.insertOne({
-    //     _id: id,
-    //     name: 'vikram',
-    //     age: 26,
-    // })
+    const insertMany = await collection.insertMany(data)
+    const insertOne = await collection.insertOne({
+        _id: id,
+        name: 'vikram',
+        age: 26,
+    })
 
-    // // the following code examples can be pasted here...
+    // the following code examples can be pasted here...
 
-    // console.log(insertOne.ops)
-    // // console.log(insert.ops)
-
-
-    // const task = [{ description: 'task1', completed: true },
-    // { description: 'task2', completed: false },
-    // { description: 'task3', completed: true }];
-
-    // const taskCollectoion = db.collection('tasks');
-
-    // const insertTasks = await taskCollectoion.insertMany(task);
+    console.log(insertOne.ops)
+    // console.log(insert.ops)
 
 
-    // console.log(insertTasks)
+    const task = [{ description: 'task1', completed: true },
+    { description: 'task2', completed: false },
+    { description: 'task3', completed: true }];
+
+    const taskCollectoion = db.collection('tasks');
+
+    const insertTasks = await taskCollectoion.insertMany(task);
+
+
+    console.log(insertTasks)
 
     return 'done.';
 }
