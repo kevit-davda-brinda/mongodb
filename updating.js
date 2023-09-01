@@ -7,16 +7,14 @@ const client = new MongoClient(url, { useUnifiedTopology: true });
 // Database Name
 const dbName = 'task-manager';
 
-
-
 async function main() {
     // Use connect method to connect to the server
     await client.connect();
-    // console.log('Connected successfully to server');
+    console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection('users');
 
-    const id = new ObjectId("64f0601e6c328afad5c36102");
+    const id = new ObjectId("64f170ec4a2ac0901de2b107");
 
     const updateOne = await collection.updateOne({
         _id : id 
@@ -26,9 +24,20 @@ async function main() {
         }
     });
 
-    console.log(updateOne);
-}
 
+    const TaskCollection = db.collection('tasks');
+
+    const updateMany = await TaskCollection.updateMany({
+        completed : false
+    },{
+        $set : {
+            completed : true
+        }
+    })
+
+    console.log(updateOne);
+    console.log(updateMany);
+}
 
 main()
     .then(console.log)
