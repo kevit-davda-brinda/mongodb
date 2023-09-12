@@ -1,20 +1,25 @@
 const express = require('express');
 const User = require('../models/user.js');
+const Task = require('../models/task.js');
 const auth = require('../middlaware/auth.js');
 const router = express.Router();
+
+console.log(User)
 
 //creating / register / signin user data
 router.post('/users', async (req, res) => {
     const user = new User(req.body);
 
     try {
+        console.log('user middleware');
         const data = await user.save();
+        console.log('user saved succesfully');
         const AuthUser = await User.findbyCredential(req.body.email, req.body.password);
         const token = await AuthUser.generateAuthToken();
 
         res.status(201).send({ user, token });
     } catch (e) {
-        res.status(404).send(e.toString())
+        res.status(404).send(e.toString());
     }
 
 })
@@ -111,17 +116,35 @@ router.patch('/users/:id', auth , async (req, res) => {
 router.delete('/users/me', auth ,async (req, res) => {
 
     // It's showing me error 
+    // const user = new User(req.body)
+    // const user = new User(req.user);
+    // const user = new User(req.body);
+
+    // const user = new User(req.body);
+
 
     // TypeError: req.user.remove is not a function
 
     try {
-        await req.user.remove()
+        console.log('before delete')
+        // await Task.deleteMany({owner : req.user._id});
+        await User.deleteOne(req.user);
+        console.log('after delete')
         res.send(req.user)
     } catch (e) {
         res.status(500).send(e.toString())
     }
 
     //
+    // try {
+    //     console.log('before delete')
+    //     // await Task.deleteMany({owner : req.user._id});
+    //     await User.deleteOne();
+    //     console.log('after delete')
+    //     res.send(req.user)
+    // } catch (e) {
+    //     res.status(500).send(e.toString())
+    // }
 })
 
 module.exports = router;

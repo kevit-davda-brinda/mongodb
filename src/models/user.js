@@ -74,6 +74,7 @@ UserSchema.statics.findbyCredential = async (email,password)=>{
 UserSchema.methods.generateAuthToken = async function(){
     const user = this;
 
+
     const token = jwt.sign({ _id : user._id.toString() },'SecrateKey')
 
     return token;
@@ -100,6 +101,7 @@ UserSchema.pre('save', async function(next){
     const user = this;
 
     // console.log('Just before posting');
+    // console.log(user);
 
     if(user.isModified('password')){
         // console.log(user.password);
@@ -111,17 +113,14 @@ UserSchema.pre('save', async function(next){
 }) //binding is importent but in this arrow function don't bind this.
 
 // Delete user tasks when user is removed
-UserSchema.pre('remove', async function (next) {
-    const user = this
-    await Task.deleteMany({ owner: user._id })
-
-    // // console.log(Task.remove({ _id , owner:req.user._id }));
-    console.log(user._id);
-    // console.log(Task);
-
-    next();
+UserSchema.pre('deleteOne'  , async function (next) {
+    // console.log(this._conditions._id);
+    const owner = this.getFilter()["_id"];
+    // console.log("line 109 "+ user);
+    await Task.deleteMany({ owner })
+    next()
 });
 
 const UserModel = mongoose.model('User', UserSchema)
 
-module.exports = UserModel
+module.exports = UserModel ;
